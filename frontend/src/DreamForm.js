@@ -15,9 +15,9 @@ const DreamForm = ({ onSubmit }) => {
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="请输入您的梦境..."
+        placeholder="pls input your dream description..."
       />
-      <button type="submit">解梦</button>
+      <button type="submit">Interpretation</button>
     </form>
   );
 };
