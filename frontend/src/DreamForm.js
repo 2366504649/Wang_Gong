@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './dist/output.css';
 
 const DreamForm = ({ onSubmit }) => {
   const [description, setDescription] = useState('');

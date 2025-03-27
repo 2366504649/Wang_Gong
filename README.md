@@ -10,3 +10,5 @@ uvicorn app:app --reload
 
 bash
 npm start
+
+npx tailwindcss -i ./src/index.css -o ./src/dist/output.css --watch
