@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Dream Interpretation</h1>
+      {/*<h1>Dream Interpretation</h1>*/}
       <DreamForm onSubmit={handleDreamSubmit} />
       {interpretation && <Result interpretation={interpretation} />}
     </div>
