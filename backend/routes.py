@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 from models import Dream, SessionLocal
 
 router = APIRouter()
 
 
-# get db session
+# 获取数据库会话
 def get_db():
     db = SessionLocal()
     try:
@@ -14,24 +15,21 @@ def get_db():
         db.close()
 
 
-# commit dream message and return result
-@router.post("/submit_dream")
-def submit_dream(description: str, db: Session = Depends(get_db)):
-    # 模拟解梦结果
-    interpretation = "这是您梦境的解读: 您的梦境描述意味着...（假数据）"
+# 定义请求体模型
+class DreamRequest(BaseModel):
+    description: str
 
-    # result to DB
-    new_dream = Dream(description=description, interpretation=interpretation)
+
+# 提交梦境信息并返回解读结果
+@router.post("/submit_dream")
+def submit_dream(request: DreamRequest, db: Session = Depends(get_db)):  # ✨ 关键改动
+    # 模拟解梦结果
+    interpretation = f"这是您梦境的解读: {request.description} 意味着...（假数据）"
+
+    # 存入数据库
+    new_dream = Dream(description=request.description, interpretation=interpretation)
     db.add(new_dream)
     db.commit()
     db.refresh(new_dream)
 
     return {"status": "success", "interpretation": interpretation}
-
-
-# get dream record
-@router.get("/get_dreams")
-def get_dreams(db: Session = Depends(get_db)):
-    dreams = db.query(Dream).all()
-    return [{"id": dream.id, "description": dream.description, "interpretation": dream.interpretation} for dream in
-            dreams]
