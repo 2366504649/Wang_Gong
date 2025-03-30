@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  fastapi:
+    image: python:3.10
+    ports:
+      - "8008:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: bash -c "pip install --no-cache-dir -r /app/requirements.txt && cd app && uvicorn app:app --host 0.0.0.0 --reload"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+
+
+
+  react:
+    image: node:18  # 使用 Node.js 镜像
+    ports:
+      - "3003:3000"  # 映射 React 服务端口
+    volumes:
+      - ./frontend:/app  # 将前端代码挂载到容器
+    working_dir: /app
+    command: >
+      bash -c "npm install &&
+               npx tailwindcss -i ./src/index.css -o ./src/dist/output.css --watch &
+               npm start"  # 启动 Tailwind 和 React
+    depends_on:
+      - fastapi  # 确保 FastAPI 后端在前端之前启动
+
