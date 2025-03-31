@@ -11,7 +11,7 @@ services:
       - PYTHONUNBUFFERED=1
     command: bash -c "pip install --no-cache-dir -r /app/requirements.txt && cd app && uvicorn app:app --host 0.0.0.0 --reload"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8008/health"]
       interval: 30s
       retries: 3
       start_period: 10s

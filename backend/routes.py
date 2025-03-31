@@ -1,3 +1,4 @@
+from fastapi.responses import RedirectResponse
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -33,3 +34,8 @@ def submit_dream(request: DreamRequest, db: Session = Depends(get_db)):  # âœ¨ å
     db.refresh(new_dream)
 
     return {"status": "success", "interpretation": interpretation}
+
+
+@router.get("/")
+async def redirect_root():
+    return RedirectResponse(url="http://localhost:3003/")
