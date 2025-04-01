@@ -1,3 +1,4 @@
+import requests
 from fastapi.responses import RedirectResponse
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
@@ -39,3 +40,16 @@ def submit_dream(request: DreamRequest, db: Session = Depends(get_db)):  # âœ¨ å
 @router.get("/")
 async def redirect_root():
     return RedirectResponse(url="http://localhost:3003/")
+
+
+OLLAMA_URL = "http://localhost:11434/api/generate"
+
+
+@router.get("/chat")
+async def chat(message: str):
+    payload = {
+        "model": "mistral",
+        "prompt": message
+    }
+    response = requests.post(OLLAMA_URL, json=payload)
+    return response.json()
