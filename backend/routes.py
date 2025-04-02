@@ -26,7 +26,7 @@ class DreamRequest(BaseModel):
 @router.post("/submit_dream")
 def submit_dream(request: DreamRequest, db: Session = Depends(get_db)):  # ✨ 关键改动
     # 模拟解梦结果
-    interpretation = f"这是您梦境的解读: {request.description} 意味着...（假数据）"
+    interpretation = f"This is the interpretation of your dream: {request.description} it is mean..."
 
     # 存入数据库
     new_dream = Dream(description=request.description, interpretation=interpretation)
