@@ -1,13 +1,11 @@
 from fastapi import FastAPI
-from routes import router
 from fastapi.middleware.cors import CORSMiddleware
-
+from routes import router
 
 app = FastAPI()
 
 # 注册路由
 app.include_router(router)
-
 
 
 app.add_middleware(

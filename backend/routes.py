@@ -1,9 +1,9 @@
 import requests
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
-from pydantic import BaseModel
 from models import Dream, SessionLocal
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -26,7 +26,9 @@ class DreamRequest(BaseModel):
 @router.post("/submit_dream")
 def submit_dream(request: DreamRequest, db: Session = Depends(get_db)):  # ✨ 关键改动
     # 模拟解梦结果
-    interpretation = f"This is the interpretation of your dream: {request.description} it is mean..."
+    interpretation = (
+        f"This is the interpretation of your dream: {request.description} it is mean..."
+    )
 
     # 存入数据库
     new_dream = Dream(description=request.description, interpretation=interpretation)
@@ -47,9 +49,6 @@ OLLAMA_URL = "http://localhost:11434/api/generate"
 
 @router.get("/chat")
 async def chat(message: str):
-    payload = {
-        "model": "mistral",
-        "prompt": message
-    }
+    payload = {"model": "mistral", "prompt": message}
     response = requests.post(OLLAMA_URL, json=payload)
     return response.json()
